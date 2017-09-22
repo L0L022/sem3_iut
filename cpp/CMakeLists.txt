@@ -1,2 +1,3 @@
 add_definitions(-std=c++11)
-add_subdirectory(GrayImage)
+
+add_executable(GreyImage GreyImage.cpp Image.cpp)
