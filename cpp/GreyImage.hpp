@@ -3,19 +3,19 @@
 
 #include "Image.hpp"
 
-// class GreyPixel
-// {
-//   typedef uint8_t PixelType;
-//
-//   GreyPixel(const PixelType value = 0);
-//
-// private:
-//   PixelType m_value;
-// };
 typedef uint8_t GreyPixel;
-typedef Image<GreyPixel> GreyImage;
+
+class GreyImage : public Image<GreyPixel>
+{
+public:
+  GreyImage(const Size width, const Size height);
+
+  void writePGM(std::ostream &os) const;
+  static GreyImage* readPGM(std::istream &is);
+};
+
 typedef GreyImage GrayImage;
 
-std::ostream &operator<<(std::ostream &os, const GreyPixel &pixel);
+std::ostream &operator<<(std::ostream &os, const uint8_t &value);
 
 #endif
