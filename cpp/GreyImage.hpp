@@ -16,6 +16,4 @@ public:
 
 typedef GreyImage GrayImage;
 
-std::ostream &operator<<(std::ostream &os, const uint8_t &value);
-
 #endif

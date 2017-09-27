@@ -46,6 +46,9 @@ private:
 	const Size m_width, m_height;
 };
 
+std::ostream &operator<<(std::ostream &os, const uint8_t &value);
+std::istream &operator>>(std::istream &is, uint8_t &value);
+
 template<typename Pixel>
 Image<Pixel>::Image(const Size width, const Size height)
 : m_pixels(nullptr),
