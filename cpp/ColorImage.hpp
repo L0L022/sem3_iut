@@ -33,6 +33,9 @@ public:
 
   void writePPM(std::ostream &os) const;
   static ColorImage* readPPM(std::istream &is);
+
+  void writeJPEG(std::ostream &os, int quality = 75) const;
+  static ColorImage* readJPEG(std::istream &is);
 };
 
 std::ostream &operator<<(std::ostream &os, const ColorPixel &pixel);

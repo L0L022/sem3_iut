@@ -2,6 +2,11 @@
 #include "Toolbox.hpp"
 #include <limits>
 #include <sstream>
+#include <cstdlib>
+
+extern "C" {
+  #include <jpeglib.h>
+}
 
 ColorImage::ColorImage(const Size width, const Size height)
 : Image<ColorPixel>(width, height)
@@ -75,6 +80,54 @@ ColorImage* ColorImage::readPPM(std::istream &is)
   }
 
   return image;
+}
+
+void ColorImage::writeJPEG(std::ostream &os, int quality) const
+{
+  struct jpeg_compress_struct jpegInfo;
+  struct jpeg_error_mgr jpegError;
+
+  JSAMPLE * jsamples = new JSAMPLE[width()*3];
+  JSAMPROW jsamplesRow[1];
+  jsamplesRow[0] = jsamples;
+
+  jpegInfo.err = jpeg_std_error(&jpegError);
+  jpeg_create_compress(&jpegInfo);
+
+  unsigned char *pixels = nullptr;
+  unsigned long pixelsSize = 0;
+  jpeg_mem_dest(&jpegInfo, &pixels, &pixelsSize);
+
+  jpegInfo.image_width = width();
+  jpegInfo.image_height = height();
+  jpegInfo.input_components = 3;
+  jpegInfo.in_color_space = JCS_RGB;
+
+  jpeg_set_defaults(&jpegInfo);
+  jpeg_set_quality(&jpegInfo, quality, TRUE);
+
+  jpeg_start_compress(&jpegInfo, TRUE);
+  while (jpegInfo.next_scanline < jpegInfo.image_height) {
+     for (size_t x = 0; x < width(); x++) {
+       const ColorPixel &p = pixel(x, jpegInfo.next_scanline);
+       jsamples[x*3] = static_cast<char>(p.red);
+       jsamples[x*3+1] = static_cast<char>(p.green);
+       jsamples[x*3+2] = static_cast<char>(p.blue);
+     }
+    jpeg_write_scanlines(&jpegInfo, jsamplesRow, 1);
+  }
+
+  jpeg_finish_compress(&jpegInfo);
+  jpeg_destroy_compress(&jpegInfo);
+  delete[] jsamples;
+
+  os.write(reinterpret_cast<const char*>(pixels), pixelsSize);
+  free(pixels);
+}
+
+ColorImage* ColorImage::readJPEG(std::istream &is)
+{
+
 }
 
 std::ostream &operator<<(std::ostream &os, const ColorPixel &pixel)

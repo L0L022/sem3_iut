@@ -19,6 +19,10 @@ int main() {
 
   catImage->writePPM(catSave);
 
+  ofstream catSaveJPEG("cat_out.jpeg", std::ios::binary | std::ios::out);
+
+  catImage->writeJPEG(catSaveJPEG);
+
   delete catImage;
 
   return 0;
