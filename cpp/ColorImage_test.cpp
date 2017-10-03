@@ -1,5 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <cstdlib>
 #include "ColorImage.hpp"
 
 using namespace std;
@@ -22,6 +25,34 @@ int main() {
   ofstream catSaveJPEG("cat_out.jpeg", std::ios::binary | std::ios::out);
 
   catImage->writeJPEG(catSaveJPEG);
+
+  delete catImage;
+  catImage = nullptr;
+  catFile.close();
+  catSaveJPEG.close();
+
+  catFile.open("cat_out.jpeg", std::ios::binary);
+  catImage = ColorImage::readJPEG(catFile);
+
+  catImage->fillRectangle(140, 155, 40, 20, ColorPixel(255, 28, 28));
+
+  catSaveJPEG.open("cat_out_2.jpeg", std::ios::binary | std::ios::out);
+  catImage->writeJPEG(catSaveJPEG, 100);
+
+  std::srand(std::time(0));
+  for(unsigned int quality = 0; quality <= 100; quality += 5)  {
+    std::ostringstream oss; // Variable pour former le nom de chaque fichier.
+    oss << "cat_out_" << std::setfill('0') << std::setw(3) << quality << ".jpg";
+
+    ofstream save(oss.str().c_str(), std::ios::binary | std::ios::out);
+
+    size_t x=std::rand()%catImage->width(), y=std::rand()%catImage->height();
+    catImage->fillRectangle(
+      x, y,
+      std::rand()%(catImage->width()-x), std::rand()%(catImage->height()-y),
+      ColorPixel(std::rand()%255, std::rand()%255, std::rand()%255));
+    catImage->writeJPEG(save, quality);
+  }
 
   delete catImage;
 
