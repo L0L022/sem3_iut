@@ -18,6 +18,9 @@ int main() {
   catImage->fillRectangle(90, 85, 40, 20, ColorPixel(234, 120, 200));
   catImage->fillRectangle(190, 87, 40, 20, ColorPixel(234, 120, 200));
 
+  catImage->cercle(109, 94, 20, ColorPixel(255, 0, 0));
+  catImage->cercle(212, 99, 20, ColorPixel(255, 0, 0 ));
+
   ofstream catSave("cat_out.ppm", std::ios::binary | std::ios::out);
 
   catImage->writePPM(catSave);
