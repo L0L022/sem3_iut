@@ -38,7 +38,8 @@ public:
 	void rectangle(const Size x, const Size y, const Size width, const Size height, const Pixel& color);
 	void fillRectangle(const Size x, const Size y, const Size width, const Size height, const Pixel& color);
 
-	void cercle(const Size x, const Size y, const Size radius, const Pixel& color);
+	void circle(const Size x, const Size y, const Size radius, const Pixel& color);
+	void fillCircle(const Size x, const Size y, const Size radius, const Pixel& color);
 
 private:
 	inline size_t pSize() const { return m_width*m_height; }
@@ -133,19 +134,48 @@ void Image<Pixel>::fillRectangle(const Size x, const Size y, const Size width, c
 }
 
 template<typename Pixel>
-void Image<Pixel>::cercle(const Size x, const Size y, const Size radius, const Pixel& color)
+void Image<Pixel>::circle(const Size x, const Size y, const Size radius, const Pixel& color)
 {
 	//merci Eric Andres
 	Size _x = 0, _y = radius, d = radius - 1;
 	while (_y >= _x) {
-		pixel( x + _x , y + _y ) = color;
-		pixel( x + _y , y + _x ) = color;
-		pixel( x - _x , y + _y ) = color;
-		pixel( x - _y , y + _x ) = color;
-		pixel( x + _x , y - _y ) = color;
-		pixel( x + _y , y - _x ) = color;
-		pixel( x - _x , y - _y ) = color;
-		pixel( x - _y , y - _x ) = color;
+		pixel( x + _x , y + _y ) = color; //4
+		pixel( x + _y , y + _x ) = color; //3
+		pixel( x - _x , y + _y ) = color; //5
+		pixel( x - _y , y + _x ) = color; //6
+		pixel( x + _x , y - _y ) = color; //1
+		pixel( x + _y , y - _x ) = color; //2
+		pixel( x - _x , y - _y ) = color; //8
+		pixel( x - _y , y - _x ) = color; //7
+
+		if (d >= 2*_x) {
+			d = d - 2*_x-1;
+			_x = _x + 1;
+		} else if (d < 2*(radius-_y)) {
+			d = d + 2*_y-1;
+			_y = _y - 1;
+		} else {
+			d = d + 2 * (_y - _x - 1);
+			_y = _y - 1;
+			_x = _x + 1;
+		}
+	}
+}
+
+template<typename Pixel>
+void Image<Pixel>::fillCircle(const Size x, const Size y, const Size radius, const Pixel& color)
+{
+	//merci Eric Andres
+	Size _x = 0, _y = radius, d = radius - 1;
+	while (_y >= _x) {
+		// hLine( x - _x , y - _y , (x + _x) - (x - _x) + 1, color);
+		// hLine( x - _y , y - _x , (x + _y) - (x - _y) + 1, color);
+		// hLine( x - _y , y + _x , (x + _y) - (x - _y) + 1, color);
+		// hLine( x - _x , y + _y , (x + _x) - (x - _x) + 1, color);
+		hLine( x - _x , y - _y , 2 * _x + 1, color);
+		hLine( x - _y , y - _x , 2 * _y + 1, color);
+		hLine( x - _y , y + _x , 2 * _y + 1, color);
+		hLine( x - _x , y + _y , 2 * _x + 1, color);
 
 		if (d >= 2*_x) {
 			d = d - 2*_x-1;
