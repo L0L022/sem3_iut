@@ -76,3 +76,16 @@ CREATE TABLE IF NOT EXISTS reponse_ouverte (
   FOREIGN KEY (id_sujet) REFERENCES sujet(id_sujet),
   FOREIGN KEY (id_question_ouverte) REFERENCES question_ouverte(id_question_ouverte)
 );
+
+/* faire une vue
+SELECT *
+FROM question
+LEFT JOIN question_ouverte ON question.id_question = question_ouverte.id_question_ouverte
+UNION
+SELECT *
+FROM question
+LEFT JOIN question_unique ON question.id_question = question_unique.id_question_unique
+UNION
+SELECT *
+FROM question
+LEFT JOIN question_multiple ON question.id_question = question_multiple.id_question_multiple*/
