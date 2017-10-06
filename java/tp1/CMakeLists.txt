@@ -1,0 +1,7 @@
+add_jar(Hello Hello.java ENTRY_POINT Hello)
+add_jar(Celsius Celsius.java ENTRY_POINT Celsius)
+add_jar(CommandLine CommandLine.java ENTRY_POINT CommandLine)
+add_jar(Fibonacci Fibonacci.java ENTRY_POINT Fibonacci)
+add_jar(MysteryNumber MysteryNumber.java ENTRY_POINT MysteryNumber)
+add_jar(Pi Pi.java ENTRY_POINT Pi)
+add_jar(PrimeNumber PrimeNumber.java ENTRY_POINT PrimeNumber)
