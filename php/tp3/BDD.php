@@ -49,7 +49,7 @@ class BDD
   public function getQuestions($idForm)
   {
     try {
-      $query = $this->PDO->prepare("SELECT * FROM question WHERE id_formulaire = ?");
+      $query = $this->PDO->prepare("SELECT * FROM view_question WHERE id_formulaire = ?");
       $query->execute(array($idForm));
     } catch (Exception $e) {
       $this->error($e);
