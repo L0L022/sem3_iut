@@ -46,6 +46,29 @@ class BDD
     }
   }
 
+  public function removeForm($id)
+  {
+    try {
+      $query = $this->PDO->prepare("DELETE FROM formulaire WHERE id_formulaire = ?");
+      $query->execute(array($id));
+    } catch (Exception $e) {
+      $this->error($e);
+    }
+  }
+
+  public function getSujets($idForm)
+  {
+    try {
+      $query = $this->PDO->prepare("SELECT * FROM view_sujet_nb_question WHERE id_formulaire = ?");
+      $query->execute(array($idForm));
+    } catch (Exception $e) {
+      $this->error($e);
+    }
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    return $res;
+  }
+
   public function getQuestions($idForm)
   {
     try {
@@ -67,13 +90,24 @@ class BDD
     } catch (Exception $e) {
       $this->error($e);
     }
+
+    return $this->PDO->lastInsertId();
+  }
+
+  private function removeQuestion($idQuestion)
+  {
+    try {
+      $query = $this->PDO->prepare("DELETE FROM question WHERE id_question = ?");
+      $query->execute(array($idQuestion));
+    } catch (Exception $e) {
+      $this->error($e);
+    }
   }
 
   public function newOpenQuestion($idForm, $title)
   {
     try {
-      newQuestion($idForm, $title);
-      //get id question
+      $idQuestion = newQuestion($idForm, $title);
       $query = $this->PDO->prepare("INSERT INTO question_ouverte (id_question_ouverte) values(?)");
       $query->execute(array($idQuestion));
     } catch (Exception $e) {
