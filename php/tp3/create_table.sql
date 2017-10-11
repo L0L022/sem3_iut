@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS formulaire (
   id_formulaire int NOT NULL AUTO_INCREMENT,
   nom  varchar(255) NOT NULL DEFAULT "",
   description varchar(255) NOT NULL DEFAULT "",
+  modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (id_formulaire)
 );
 
@@ -204,3 +205,12 @@ FROM `view_reponse_multiple`
 UNION
 SELECT id_formulaire, id_question, intitule, id_sujet, NULL AS 'id_choix', NULL AS 'signification', NULL AS 'id_reponse_multiple', mots, 'ouverte' AS 'type'
 FROM `view_reponse_ouverte`;
+
+CREATE VIEW view_sujet AS
+SELECT DISTINCT id_formulaire, id_sujet, id_question
+FROM `view_reponse`;
+
+CREATE VIEW view_sujet_nb_question AS
+SELECT id_formulaire, id_sujet, COUNT(*) AS 'nb_question'
+FROM `view_sujet`
+GROUP BY id_sujet;

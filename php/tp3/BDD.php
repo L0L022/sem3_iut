@@ -46,6 +46,29 @@ class BDD
     }
   }
 
+  public function removeForm($id)
+  {
+    try {
+      $query = $this->PDO->prepare("DELETE FROM formulaire WHERE id_formulaire = ?");
+      $query->execute(array($id));
+    } catch (Exception $e) {
+      $this->error($e);
+    }
+  }
+
+  public function getSujets($idForm)
+  {
+    try {
+      $query = $this->PDO->prepare("SELECT * FROM view_sujet_nb_question WHERE id_formulaire = ?");
+      $query->execute(array($idForm));
+    } catch (Exception $e) {
+      $this->error($e);
+    }
+    $res = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    return $res;
+  }
+
   public function getQuestions($idForm)
   {
     try {

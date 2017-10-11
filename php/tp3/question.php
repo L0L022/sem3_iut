@@ -1,9 +1,11 @@
 <?php
   require_once("BDD.php");
 
-  if (isset($_POST['open'])) {
+  if (isset($_POST['edit'])) {
     $BDD = new BDD();
-    $questions = $BDD->getQuestions($_POST['open']);
+    $questions = $BDD->getQuestions($_POST['edit']);
+  } else {
+    header('location: forms.php');
   }
 ?>
 <!DOCTYPE html>

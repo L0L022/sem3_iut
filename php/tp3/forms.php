@@ -2,6 +2,15 @@
   require_once("BDD.php");
 
   $BDD = new BDD();
+
+  if (isset($_POST['new'])) {
+    $BDD->newForm($_POST['name'], $_POST['description']);
+  }
+
+  if (isset($_POST['remove'])) {
+    $BDD->removeForm($_POST['remove']);
+  }
+
   $forms = $BDD->getForms();
 ?>
 <!DOCTYPE html>
@@ -18,6 +27,19 @@
     <h2>Formulaires</h2>
   </div>
   <form class="w3-container" action="" method="post">
+     <div class="w3-row-padding">
+       <div class="w3-half">
+         <label>Nom</label>
+       <input class="w3-input w3-border w3-light-grey" type="text" name="name">
+     </div>
+     <div class="w3-half">
+        <label>Description</label>
+    <input class="w3-input w3-border w3-light-grey" type="text" name="description">
+  </div>
+    <button type="submit" class="w3-button" name="new">
+      <i class="fa fa-plus"></i>
+    </button>
+  </div>
     <ul class="w3-ul w3-card-4">
     <?php
       foreach ($forms as $form) {
@@ -30,11 +52,13 @@
               <span class="w3-large">$name</span><br>
               <span>$description</span>
             </div>
-            <input class="w3-bar-item w3-button w3-xlarge w3-right" type="submit" name="remove" value="×">
-            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="edit">
+            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="remove" value="$id">
+              <i class="fa fa-remove"></i>
+            </button>
+            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="edit" value="$id" formaction="question.php">
               <i class="fa fa-edit"></i>
             </button>
-            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="open" value="$id" formaction="question.php">
+            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="open" value="$id" formaction="sujet.php">
               <i class="fa fa-eye"></i>
             </button>
           </li>
