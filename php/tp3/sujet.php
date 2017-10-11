@@ -1,8 +1,9 @@
 <?php
   require_once("BDD.php");
 
-  if(isset($_POST['open'])) {
+  if (isset($_POST['open'])) {
     $BDD = new BDD();
+
     $sujets = $BDD->getSujets($_POST['open']);
   } else {
     header('location: forms.php');
@@ -32,16 +33,13 @@
             <div class="w3-bar-item">
               <span class="w3-large">Sujet n°$id</span><br>
               <span>Nombre de questions répondus : $nb_question</span>
-            </div> <!--
+            </div>
             <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="remove" value="$id">
               <i class="fa fa-remove"></i>
             </button>
-            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="edit">
+            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="edit" value="$id" formaction="question.php">
               <i class="fa fa-edit"></i>
             </button>
-            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="open" value="$id" formaction="question.php">
-              <i class="fa fa-eye"></i>
-            </button> -->
           </li>
 EOS;
       }

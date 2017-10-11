@@ -90,13 +90,24 @@ class BDD
     } catch (Exception $e) {
       $this->error($e);
     }
+
+    return $this->PDO->lastInsertId();
+  }
+
+  private function removeQuestion($idQuestion)
+  {
+    try {
+      $query = $this->PDO->prepare("DELETE FROM question WHERE id_question = ?");
+      $query->execute(array($idQuestion));
+    } catch (Exception $e) {
+      $this->error($e);
+    }
   }
 
   public function newOpenQuestion($idForm, $title)
   {
     try {
-      newQuestion($idForm, $title);
-      //get id question
+      $idQuestion = newQuestion($idForm, $title);
       $query = $this->PDO->prepare("INSERT INTO question_ouverte (id_question_ouverte) values(?)");
       $query->execute(array($idQuestion));
     } catch (Exception $e) {

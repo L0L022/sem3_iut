@@ -55,7 +55,7 @@
             <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="remove" value="$id">
               <i class="fa fa-remove"></i>
             </button>
-            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="edit" value="$id" formaction="question.php">
+            <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="edit" value="$id" formaction="edit_form.php">
               <i class="fa fa-edit"></i>
             </button>
             <button type="submit" class="w3-bar-item w3-button w3-xlarge w3-right" name="open" value="$id" formaction="sujet.php">
