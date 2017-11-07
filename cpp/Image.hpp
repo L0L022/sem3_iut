@@ -16,6 +16,7 @@ public:
 	Image() = delete;
 	Image(const Size width, const Size height);
 	Image(const Image &image);
+	// Image(Image &&image);
 	~Image();
 
 	Image& operator=(const Image &image) = delete;
@@ -40,6 +41,8 @@ public:
 
 	void circle(const Size x, const Size y, const Size radius, const Pixel& color);
 	void fillCircle(const Size x, const Size y, const Size radius, const Pixel& color);
+
+	Image* simpleScale(const Size width, const Size height) const;
 
 private:
 	inline size_t pSize() const { return m_width*m_height; }
@@ -67,6 +70,13 @@ Image<Pixel>::Image(const Image &image)
 {
 	std::memcpy(m_pixels, image.m_pixels, sizeof(Pixel) * pSize());
 }
+
+// template<typename Pixel> // attention move fait pas ce que je veux
+// Image<Pixel>::Image(Image &&image)
+// : m_pixels(std::move(image.m_pixels)),
+//   m_width(std::move(image.m_width)),
+//   m_height(std::move(image.m_height))
+// {}
 
 template<typename Pixel>
 Image<Pixel>::~Image()
@@ -189,6 +199,18 @@ void Image<Pixel>::fillCircle(const Size x, const Size y, const Size radius, con
 			_x = _x + 1;
 		}
 	}
+}
+
+template<typename Pixel>
+Image<Pixel>* Image<Pixel>::simpleScale(const Size width, const Size height) const
+{
+	Image<Pixel>* img = new Image<Pixel>(width, height);
+
+	for (Size y = 0; y < height; ++y)
+		for (Size x = 0; x < width; ++x)
+			img->pixel(x, y) = pixel(x/static_cast<double>(width)*this->width(), y/static_cast<double>(height)*this->height());
+
+	return img;
 }
 
 template<typename Pixel>

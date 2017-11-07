@@ -30,6 +30,9 @@ class ColorImage : public Image<ColorPixel>
 {
 public:
   ColorImage(const Size width, const Size height);
+  ColorImage(const Image<ColorPixel> &image);
+
+  ColorImage* simpleScale(const Size width, const Size height) const;
 
   void writePPM(std::ostream &os) const;
   static ColorImage* readPPM(std::istream &is);
