@@ -41,6 +41,8 @@ public:
 	void circle(const Size x, const Size y, const Size radius, const Pixel& color);
 	void fillCircle(const Size x, const Size y, const Size radius, const Pixel& color);
 
+	void line(const Size x1, const Size y1, const Size x2, const Size y2, const Pixel& color);
+
 private:
 	inline size_t pSize() const { return m_width*m_height; }
 
@@ -187,6 +189,48 @@ void Image<Pixel>::fillCircle(const Size x, const Size y, const Size radius, con
 			d = d + 2 * (_y - _x - 1);
 			_y = _y - 1;
 			_x = _x + 1;
+		}
+	}
+}
+
+template<typename Pixel>
+void Image<Pixel>::line(const Size x1, const Size y1, const Size x2, const Size y2, const Pixel& color)
+{
+	size_t dx = 0, dy = 0;
+	if ((dx = x2 - x1) != 0) {
+		if (dx > 0) {
+			if ((dy = y2 - y1) != 0) {
+				if (dy > 0) {
+					if (dx >= dy) {
+						size_t e = dx;
+						dx *= 2;
+						dy *= 2;
+						while (true) {
+							pixel(x1, y1) = color;
+							if (++x1 == x2)
+								break;
+							if ((e -= dy) < 0) {
+								++y1;
+								e += dx;
+							}
+						}
+					} else {
+						size_t e = dy;
+						dy *= 2;
+						dx *= 2;
+						while (true) {
+							pixel(x1, y1) = color;
+							if (++y1 == y2)
+								break;
+							if ((e -= dx) < 0) {
+								++x1;
+								e += dy;
+							}
+						}
+					}
+
+				}
+			}
 		}
 	}
 }
