@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS formulaire (
   id_formulaire int NOT NULL AUTO_INCREMENT,
   nom  varchar(255) NOT NULL DEFAULT "",
   description varchar(255) NOT NULL DEFAULT "",
-  modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  date_creation timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (id_formulaire)
 );
 
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS question (
   id_question int NOT NULL AUTO_INCREMENT,
   id_formulaire int NOT NULL,
   intitule varchar(255) NOT NULL DEFAULT "",
+  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (id_question),
   FOREIGN KEY (id_formulaire) REFERENCES formulaire(id_formulaire)
 );
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS question_multiple (
 CREATE TABLE IF NOT EXISTS choix (
   id_choix int NOT NULL AUTO_INCREMENT,
   signification varchar(255) NOT NULL DEFAULT "",
+  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (id_choix)
 );
 
@@ -56,33 +59,56 @@ CREATE TABLE IF NOT EXISTS choix_multiple (
 
 CREATE TABLE IF NOT EXISTS sujet (
   id_sujet int NOT NULL AUTO_INCREMENT,
+  valide bool NOT NULL DEFAULT false,
+  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (id_sujet)
 );
 
-CREATE TABLE IF NOT EXISTS reponse_unique (
+CREATE TABLE IF NOT EXISTS reponse (
+  id_reponse int NOT NULL AUTO_INCREMENT,
   id_sujet int NOT NULL,
+  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (id_reponse),
+  FOREIGN KEY (id_sujet) REFERENCES sujet(id_sujet)
+);
+
+CREATE TABLE IF NOT EXISTS reponse_unique (
+  id_reponse int NOT NULL,,
   id_choix_unique int NOT NULL,
-  PRIMARY KEY (id_sujet, id_choix_unique),
-  FOREIGN KEY (id_sujet) REFERENCES sujet(id_sujet),
+  PRIMARY KEY (id_reponse, id_choix_unique),
+  FOREIGN KEY (id_reponse) REFERENCES reponse(id_reponse),
   FOREIGN KEY (id_choix_unique) REFERENCES choix_unique(id_choix_unique)
 );
 
 CREATE TABLE IF NOT EXISTS reponse_multiple (
   id_reponse_multiple int NOT NULL AUTO_INCREMENT,
-  id_sujet int NOT NULL,
+  id_reponse int NOT NULL,
   id_choix_multiple int NOT NULL,
   PRIMARY KEY (id_reponse_multiple),
-  FOREIGN KEY (id_sujet) REFERENCES sujet(id_sujet),
+  FOREIGN KEY (id_reponse) REFERENCES reponse(id_reponse),
   FOREIGN KEY (id_choix_multiple) REFERENCES choix_multiple(id_choix_multiple)
 );
 
 CREATE TABLE IF NOT EXISTS reponse_ouverte (
-  id_sujet int NOT NULL,
+  id_reponse int NOT NULL,
   id_question_ouverte int NOT NULL,
   mots varchar(255) NOT NULL DEFAULT "",
-  PRIMARY KEY (id_sujet, id_question_ouverte),
-  FOREIGN KEY (id_sujet) REFERENCES sujet(id_sujet),
+  PRIMARY KEY (id_reponse, id_question_ouverte),
+  FOREIGN KEY (id_reponse) REFERENCES reponse(id_reponse),
   FOREIGN KEY (id_question_ouverte) REFERENCES question_ouverte(id_question_ouverte)
+);
+
+CREATE TABLE IF NOT EXISTS terme_substituant (
+  id_terme_substituant int NOT NULL AUTO_INCREMENT,
+  mot varchar(255) NOT NULL DEFAULT "",
+  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (id_terme_substituant)
+);
+
+CREATE TABLE IF NOT EXISTS terme_substitue (
+  id_terme_substituant int NOT NULL,
+  mot varchar(255) NOT NULL DEFAULT "",
+  PRIMARY KEY (id_terme_substituant, mot)
 );
 
 -- création d'un formulaire
