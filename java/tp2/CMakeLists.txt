@@ -1,2 +1,5 @@
 add_jar(Minimum Minimum.java ENTRY_POINT Minimum)
 add_jar(NIR NIR.java ENTRY_POINT NIR)
+add_jar(Array Array.java ENTRY_POINT Array)
+add_jar(Array2D Array2D.java ENTRY_POINT Array2D)
+add_jar(Vectorr Vectorr.java ENTRY_POINT Vectorr)

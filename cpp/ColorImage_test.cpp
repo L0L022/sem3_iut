@@ -10,6 +10,7 @@ using namespace std;
 int main() {
   ifstream catFile("cat.ppm", std::ios::binary);
   ColorImage *catImage = ColorImage::readPPM(catFile);
+  catFile.close();
 
   catImage->rectangle(10, 10, 300, 200, ColorPixel(255, 0, 0));
   catImage->rectangle(15, 15, 280, 180, ColorPixel(0, 255, 0));
@@ -23,25 +24,26 @@ int main() {
   catImage->fillCircle(150, 96, 10, ColorPixel(0, 255, 0));
 
   ofstream catSave("cat_out.ppm", std::ios::binary | std::ios::out);
-
   catImage->writePPM(catSave);
+  catSave.close();
 
   ofstream catSaveJPEG("cat_out.jpeg", std::ios::binary | std::ios::out);
-
   catImage->writeJPEG(catSaveJPEG);
+  catSaveJPEG.close();
 
   delete catImage;
   catImage = nullptr;
-  catFile.close();
-  catSaveJPEG.close();
+
 
   catFile.open("cat_out.jpeg", std::ios::binary);
   catImage = ColorImage::readJPEG(catFile);
+  catFile.close();
 
   catImage->fillRectangle(140, 155, 40, 20, ColorPixel(255, 28, 28));
 
   catSaveJPEG.open("cat_out_2.jpeg", std::ios::binary | std::ios::out);
   catImage->writeJPEG(catSaveJPEG, 100);
+  catSaveJPEG.close();
 
   std::srand(std::time(0));
   for(unsigned int quality = 0; quality <= 100; quality += 5)  {
@@ -59,6 +61,19 @@ int main() {
   }
 
   delete catImage;
+  catImage = nullptr;
+
+  catFile.open("little_cat.ppm", std::ios::binary);
+  catImage = ColorImage::readPPM(catFile);
+  catFile.close();
+
+  ColorImage* scaleCat = catImage->simpleScale(1000, 5000);
+
+  catSave.open("cat_scale_out.ppm", std::ios::binary | std::ios::out);
+  scaleCat->writePPM(catSave);
+  catSave.close();
+
+  delete scaleCat;
 
   return 0;
 }

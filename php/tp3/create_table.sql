@@ -1,242 +1,32 @@
-CREATE TABLE IF NOT EXISTS formulaire (
-  id_formulaire int NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS personne (
+  id_personne int NOT NULL AUTO_INCREMENT,
   nom  varchar(255) NOT NULL DEFAULT "",
+  prenom varchar(255) NOT NULL DEFAULT "",
+  mail varchar(255) NOT NULL DEFAULT "",
+  PRIMARY KEY (id_personne)
+);
+
+CREATE TABLE IF NOT EXISTS groupe (
+  id_groupe int NOT NULL AUTO_INCREMENT,
+  nom varchar(255) NOT NULL DEFAULT "",
   description varchar(255) NOT NULL DEFAULT "",
-  date_creation timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (id_formulaire)
+  PRIMARY KEY (id_groupe)
 );
 
-CREATE TABLE IF NOT EXISTS question (
-  id_question int NOT NULL AUTO_INCREMENT,
-  id_formulaire int NOT NULL,
-  intitule varchar(255) NOT NULL DEFAULT "",
-  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (id_question),
-  FOREIGN KEY (id_formulaire) REFERENCES formulaire(id_formulaire)
+CREATE TABLE IF NOT EXISTS groupe_personne (
+  id_groupe int NOT NULL,
+  id_personne int NOT NULL,
+  PRIMARY KEY (id_groupe, id_personne),
+  FOREIGN KEY (id_groupe) REFERENCES groupe(id_groupe),
+  FOREIGN KEY (id_personne) REFERENCES personne(id_personne)
 );
 
-CREATE TABLE IF NOT EXISTS question_ouverte (
-  id_question_ouverte int NOT NULL,
-  PRIMARY KEY (id_question_ouverte),
-  FOREIGN KEY (id_question_ouverte) REFERENCES question(id_question)
-);
+INSERT INTO personne (nom,prenom,mail) VALUES ("Head","Tatiana","et.netus.et@Aliquamrutrum.net"),("Case","Barbara","aliquam.eros@eratSednunc.co.uk"),("Gardner","Hayley","lacus@cursusnon.edu"),("Pena","Cameron","lobortis.risus.In@risus.org"),("Padilla","Keiko","amet.ornare.lectus@Integereulacus.co.uk"),("Porter","Leah","pede@egestashendrerit.org"),("Buchanan","Athena","nibh.Phasellus@ipsumdolorsit.co.uk"),("Rowe","Shannon","magnis@Lorem.net"),("Conrad","Gage","molestie@scelerisque.ca"),("Pittman","Hedley","tellus.justo@aarcuSed.net"),("Roberts","Ross","enim@vellectus.edu"),("Dale","Jolene","dapibus.id@idenimCurabitur.edu"),("Parsons","Jescie","nunc.In.at@Donec.net"),("Kent","Lynn","et.rutrum.non@aauctor.org"),("Jones","Brynn","sem.mollis.dui@ametdapibus.com"),("Elliott","Marvin","purus.in.molestie@risusvariusorci.co.uk"),("Jacobs","Owen","sit.amet@dolornonummyac.ca"),("Trujillo","Charles","erat.eget@magnaa.org"),("Jensen","Karleigh","orci.Ut@arcuSed.edu"),("Merritt","Shafira","Duis@semperauctorMauris.ca"),("Padilla","Byron","tincidunt@eratvolutpat.com"),("Mcgee","Hoyt","Nunc.mauris.elit@malesuada.edu"),("Maxwell","Zephr","commodo.hendrerit.Donec@tellusimperdietnon.ca"),("Key","Avram","sapien.Aenean.massa@Curabitur.org"),("Farmer","Hilel","semper.tellus@acfacilisisfacilisis.net"),("Peterson","Aaron","at.risus.Nunc@vitae.org"),("Hodges","Ethan","nonummy@velit.net"),("Tyson","Hall","lorem.ac.risus@neque.net"),("Hoffman","Elliott","Integer@mollis.co.uk"),("Richmond","Moses","vehicula.et@tellussemmollis.org"),("Mcclure","Graham","non.dapibus@velnislQuisque.edu"),("Dillard","Keefe","Maecenas.malesuada.fringilla@dolorvitaedolor.ca"),("Stanley","Gavin","elit@Mauris.ca"),("Rios","Otto","magna.a.tortor@vel.org"),("Ballard","MacKensie","pede.Praesent.eu@dolorsitamet.net"),("Paul","Kibo","lacus.vestibulum.lorem@non.co.uk"),("Mcclain","Jemima","vulputate.posuere@molestiedapibusligula.com"),("Reilly","Yvette","mattis.semper.dui@mollisvitae.co.uk"),("Lara","Nero","libero@facilisisSuspendisse.ca"),("Carey","Savannah","turpis@orciluctuset.org"),("Hogan","Gage","tempor.diam@urna.co.uk"),("James","Isadora","orci.luctus@atortorNunc.ca"),("Acosta","Naida","mauris@cursusaenim.org"),("Lopez","Levi","sit@Duis.org"),("Jackson","Nadine","eget.metus@posuerecubiliaCurae.net"),("Moore","Clare","Nullam.feugiat@Inmipede.co.uk"),("Tran","Devin","quam.quis.diam@blandit.co.uk"),("Aguilar","Harper","rutrum.Fusce@adipiscingligulaAenean.co.uk"),("Wong","Cedric","magna.Phasellus.dolor@tristiqueaceleifend.org"),("Nichols","Kenneth","eget.tincidunt@nec.co.uk");
+INSERT INTO personne (nom,prenom,mail) VALUES ("Hahn","Blaine","arcu.vel.quam@quam.ca"),("Dunlap","Jason","gravida@pharetra.ca"),("Sanford","Lila","iaculis.odio.Nam@eget.com"),("Mendoza","Gillian","facilisis.eget@maurisanunc.net"),("Nixon","Jonas","sit.amet@a.com"),("Cameron","Jenna","blandit.viverra.Donec@Nuncullamcorper.edu"),("Mann","Haley","sodales.purus.in@ultricesposuere.co.uk"),("Gay","Idona","nisl.Nulla@Sed.net"),("Carter","Vaughan","tempus.lorem@nostra.com"),("Ayers","Hilel","diam.Duis.mi@Duis.net"),("Banks","Ingrid","mattis.ornare.lectus@dictummagna.com"),("Hendricks","Ethan","sociis.natoque@vitaeodio.net"),("Hill","Leo","eu.arcu@justoeuarcu.net"),("Mathews","Chantale","interdum.Sed.auctor@lacusAliquamrutrum.net"),("Bennett","Cassidy","imperdiet.ullamcorper@commodoatlibero.ca"),("Allen","Courtney","odio.a@tempusrisus.net"),("Gray","Isaac","Nunc@commodotinciduntnibh.co.uk"),("Roberts","Colby","ultricies.adipiscing@pellentesqueSeddictum.edu"),("Yang","Abbot","diam.Proin.dolor@dignissimpharetra.com"),("Austin","Quinn","lacus.Mauris.non@dignissim.edu"),("Vega","Alma","lobortis.ultrices.Vivamus@orciquis.net"),("Coffey","Alden","sed.est@erosNam.edu"),("Farley","India","sed.est@esttemporbibendum.edu"),("Foster","Sigourney","eget.ipsum.Donec@risusNunc.net"),("Mcfarland","Brock","Ut@facilisis.edu"),("Faulkner","Solomon","dui.Fusce.diam@velest.ca"),("Soto","Sigourney","nibh@magnaa.org"),("Hill","Tate","dapibus@vitaesodalesnisi.ca"),("Daniel","Pearl","sem.magna@utlacusNulla.com"),("Scott","Colorado","enim@id.org"),("Welch","Shellie","sapien@lectusCumsociis.org"),("Sanders","Lucian","vulputate@consectetueradipiscing.co.uk"),("Lloyd","Jeremy","vitae@dolordolortempus.edu"),("Fletcher","Kay","risus@adipiscingelit.com"),("Bonner","Kiara","dis.parturient@mus.org"),("Good","Kenneth","sollicitudin.a@loremluctusut.co.uk"),("Rosario","Armand","tincidunt.tempus.risus@risusat.ca"),("Roberts","Kylie","Class.aptent@magna.ca"),("Murphy","Chadwick","egestas@id.co.uk"),("Stanley","Basil","massa.rutrum.magna@non.co.uk"),("Hall","Elmo","erat.Etiam@ultriciessem.net"),("Mitchell","Justine","consequat.lectus@doloregestas.co.uk"),("Crosby","Fletcher","lacus@sedconsequatauctor.org"),("Dudley","Allen","eget.mollis@rhoncus.ca"),("Sharp","Nola","laoreet@Donec.net"),("Patel","Gwendolyn","tincidunt@gravida.edu"),("Daugherty","Remedios","dolor@lectusconvallisest.ca"),("Hensley","Jane","ac@nislQuisquefringilla.edu"),("Abbott","Liberty","auctor.velit@Donecnibhenim.ca"),("Larsen","Walter","quis.tristique@vitaediamProin.com");
 
-CREATE TABLE IF NOT EXISTS question_unique (
-  id_question_unique int NOT NULL,
-  PRIMARY KEY (id_question_unique),
-  FOREIGN KEY (id_question_unique) REFERENCES question(id_question)
-);
+INSERT INTO groupe (nom,description) VALUES ("Laoreet Libero LLP","Luzzara"),("Aliquet Associates","Reading"),("Sit Corp.","Abbeville"),("Eget Mollis Lectus Inc.","Sundrie"),("Libero Consulting","Antey-Saint-Andrè"),("Non Lorem Corp.","Lleida"),("Est Vitae Sodales Inc.","Elen"),("Tristique Neque Venenatis Associates","Houtave"),("Commodo Inc.","Peine"),("Magna Industries","Guben"),("Odio Ltd","Massello"),("Mollis Integer Tincidunt LLP","Bleid"),("Aliquam Nisl Limited","Norcia"),("Fusce Incorporated","Lüneburg"),("Risus Morbi Industries","Alingsås"),("In Faucibus LLP","North Vancouver"),("Erat Semper Rutrum LLP","Precenicco"),("Auctor Ullamcorper Nisl Company","Bury St. Edmunds"),("In Dolor Fusce Foundation","Leuze"),("Proin Dolor Company","Sint-Michiels"),("Augue Corporation","Rivi�re-du-Loup"),("Sit Institute","Rotello"),("Faucibus Associates","Marsciano"),("Cras LLC","Villa Alegre"),("Cursus Diam Ltd","Machilipatnam"),("In Cursus LLP","Olcenengo"),("Sagittis Company","Vilcún"),("Dolor Nonummy Consulting","Coimbatore"),("Erat Semper Rutrum LLC","Hamilton"),("Feugiat Tellus Limited","Thanjavur"),("Vitae Sodales At Incorporated","Murray Bridge"),("Risus Corporation","Laces/Latsch"),("Risus Company","Erchie"),("Cras Interdum Nunc PC","Edmundston"),("Enim Consulting","Ernage"),("Vitae Ltd","Lloydminster"),("Dictum Placerat Augue Institute","Saskatoon"),("Libero Et Tristique Associates","Hualañé"),("Eget Metus Eu Company","Daly"),("Amet Associates","Vilvoorde"),("Pellentesque Tellus Sem Associates","Warri"),("Lectus Pede Associates","Naperville"),("Montes Nascetur Ridiculus Consulting","Davoli"),("Enim Etiam LLC","Tofield"),("Vel Company","Passau"),("Consectetuer Euismod Est Limited","Opglabbeek"),("Luctus LLP","Enna"),("Sociosqu Inc.","Morinville"),("Fringilla Porttitor Vulputate Associates","Telfs"),("Pharetra Consulting","Blind River");
+INSERT INTO groupe (nom,description) VALUES ("Felis Ullamcorper Foundation","Broxburn"),("Libero Donec Inc.","Port Lincoln"),("Cursus Integer LLP","Livingston"),("Proin Dolor Nulla Institute","Sedgewick"),("Massa Mauris Corporation","Little Rock"),("Morbi Quis Urna Limited","Toledo"),("Est Vitae Sodales Incorporated","Warrington"),("Aliquet Molestie Associates","Saskatoon"),("Est Incorporated","Salles"),("Feugiat Non Corporation","Tramonti di Sopra"),("Ut Eros Non Corporation","Purnea"),("Dapibus Id PC","Staßfurt"),("Accumsan PC","Gölcük"),("Eu Dolor Associates","Tuktoyaktuk"),("Cum Sociis Associates","Sanquhar"),("Elit Institute","Tay"),("Aliquet Odio LLP","Klabbeek"),("Dui Institute","Gellik"),("Rhoncus Consulting","Alto del Carmen"),("Mollis LLC","Hartford"),("A Mi Industries","Gmunden"),("Ac Institute","Geelong"),("Nibh Dolor Nonummy Inc.","Braies/Prags"),("Lacus Cras Corp.","Hamilton"),("Dolor Nonummy Ac PC","Basildon"),("Sem Pellentesque Associates","Kirkintilloch"),("A Ultricies Adipiscing Ltd","Cape Breton Island"),("Nec Limited","Daly"),("Sed LLP","Motta Sant'Anastasia"),("Metus LLC","Arbroath"),("Odio Semper Cursus Ltd","Wiesbaden"),("Mollis Non PC","Loncoche"),("Ut Tincidunt Vehicula Incorporated","Boulogne-sur-Mer"),("Ligula Consectetuer Rhoncus Institute","Bergen op Zoom"),("Pede LLC","Luino"),("Phasellus Fermentum Institute","Sefro"),("Adipiscing Corporation","Barbania"),("Tellus Industries","Emines"),("Laoreet Ipsum Corporation","Watermaal-Bosvoorde"),("Proin Nisl Incorporated","Thorold"),("Ultrices A Auctor Associates","Beert"),("Nunc Ut Erat Corporation","Acosse"),("In Lobortis Associates","Reno"),("Sit Amet Incorporated","Bad Vilbel"),("Enim Incorporated","Treguaco"),("Leo Vivamus Nibh PC","Rae Lakes"),("Aliquam Erat Inc.","Boignee"),("Ac Arcu Nunc Consulting","Junagadh"),("Ultricies Ornare Elit Ltd","Forbach"),("Vulputate Limited","Monte Giberto");
 
-CREATE TABLE IF NOT EXISTS question_multiple (
-  id_question_multiple int NOT NULL,
-  PRIMARY KEY (id_question_multiple),
-  FOREIGN KEY (id_question_multiple) REFERENCES question(id_question)
-);
-
-CREATE TABLE IF NOT EXISTS choix (
-  id_choix int NOT NULL AUTO_INCREMENT,
-  signification varchar(255) NOT NULL DEFAULT "",
-  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (id_choix)
-);
-
-CREATE TABLE IF NOT EXISTS choix_unique (
-  id_choix_unique int NOT NULL,
-  id_question_unique int NOT NULL,
-  PRIMARY KEY (id_choix_unique, id_question_unique),
-  FOREIGN KEY (id_choix_unique) REFERENCES choix(id_choix),
-  FOREIGN KEY (id_question_unique) REFERENCES question_unique(id_question_unique)
-);
-
-CREATE TABLE IF NOT EXISTS choix_multiple (
-  id_choix_multiple int NOT NULL,
-  id_question_multiple int NOT NULL,
-  PRIMARY KEY (id_choix_multiple, id_question_multiple),
-  FOREIGN KEY (id_choix_multiple) REFERENCES choix(id_choix),
-  FOREIGN KEY (id_question_multiple) REFERENCES question_multiple(id_question_multiple)
-);
-
-CREATE TABLE IF NOT EXISTS sujet (
-  id_sujet int NOT NULL AUTO_INCREMENT,
-  valide bool NOT NULL DEFAULT false,
-  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (id_sujet)
-);
-
-CREATE TABLE IF NOT EXISTS reponse (
-  id_reponse int NOT NULL AUTO_INCREMENT,
-  id_sujet int NOT NULL,
-  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (id_reponse),
-  FOREIGN KEY (id_sujet) REFERENCES sujet(id_sujet)
-);
-
-CREATE TABLE IF NOT EXISTS reponse_unique (
-  id_reponse int NOT NULL,,
-  id_choix_unique int NOT NULL,
-  PRIMARY KEY (id_reponse, id_choix_unique),
-  FOREIGN KEY (id_reponse) REFERENCES reponse(id_reponse),
-  FOREIGN KEY (id_choix_unique) REFERENCES choix_unique(id_choix_unique)
-);
-
-CREATE TABLE IF NOT EXISTS reponse_multiple (
-  id_reponse_multiple int NOT NULL AUTO_INCREMENT,
-  id_reponse int NOT NULL,
-  id_choix_multiple int NOT NULL,
-  PRIMARY KEY (id_reponse_multiple),
-  FOREIGN KEY (id_reponse) REFERENCES reponse(id_reponse),
-  FOREIGN KEY (id_choix_multiple) REFERENCES choix_multiple(id_choix_multiple)
-);
-
-CREATE TABLE IF NOT EXISTS reponse_ouverte (
-  id_reponse int NOT NULL,
-  id_question_ouverte int NOT NULL,
-  mots varchar(255) NOT NULL DEFAULT "",
-  PRIMARY KEY (id_reponse, id_question_ouverte),
-  FOREIGN KEY (id_reponse) REFERENCES reponse(id_reponse),
-  FOREIGN KEY (id_question_ouverte) REFERENCES question_ouverte(id_question_ouverte)
-);
-
-CREATE TABLE IF NOT EXISTS terme_substituant (
-  id_terme_substituant int NOT NULL AUTO_INCREMENT,
-  mot varchar(255) NOT NULL DEFAULT "",
-  date_modification timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (id_terme_substituant)
-);
-
-CREATE TABLE IF NOT EXISTS terme_substitue (
-  id_terme_substituant int NOT NULL,
-  mot varchar(255) NOT NULL DEFAULT "",
-  PRIMARY KEY (id_terme_substituant, mot)
-);
-
--- création d'un formulaire
-
-INSERT INTO `formulaire` (`nom`, `description`) VALUES ('Premier formulaire', 'Description du premier formulaire');
-INSERT INTO `formulaire` (`nom`, `description`) VALUES ('Deuxième formulaire', 'Description du deuxième formulaire');
-
-INSERT INTO `question` (`id_formulaire`, `intitule`) VALUES ('1', 'Quel est votre genre ?');
-INSERT INTO `question_unique` (`id_question_unique`) VALUES ('1');
-INSERT INTO `choix` (`signification`) VALUES ('Homme');
-INSERT INTO `choix` (`signification`) VALUES ('Femme');
-INSERT INTO `choix` (`signification`) VALUES ('Autre');
-INSERT INTO `choix_unique` (`id_choix_unique`, `id_question_unique`) VALUES ('1', '1');
-INSERT INTO `choix_unique` (`id_choix_unique`, `id_question_unique`) VALUES ('2', '1');
-INSERT INTO `choix_unique` (`id_choix_unique`, `id_question_unique`) VALUES ('3', '1');
-
-INSERT INTO `question` (`id_formulaire`, `intitule`) VALUES ('2', 'Quel est votre genre ?');
-INSERT INTO `question_unique` (`id_question_unique`) VALUES ('2');
-INSERT INTO `choix` (`signification`) VALUES ('Homme');
-INSERT INTO `choix` (`signification`) VALUES ('Femme');
-INSERT INTO `choix` (`signification`) VALUES ('Autre');
-INSERT INTO `choix_unique` (`id_choix_unique`, `id_question_unique`) VALUES ('4', '2');
-INSERT INTO `choix_unique` (`id_choix_unique`, `id_question_unique`) VALUES ('5', '2');
-INSERT INTO `choix_unique` (`id_choix_unique`, `id_question_unique`) VALUES ('6', '2');
-
-INSERT INTO `question` (`id_formulaire`, `intitule`) VALUES ('1', 'Tu sais faire quoi ?');
-INSERT INTO `question_multiple` (`id_question_multiple`) VALUES ('3');
-INSERT INTO `choix` (`signification`) VALUES ('C++');
-INSERT INTO `choix` (`signification`) VALUES ('PHP');
-INSERT INTO `choix` (`signification`) VALUES ('Java');
-INSERT INTO `choix_multiple` (`id_choix_multiple`, `id_question_multiple`) VALUES ('7', '3');
-INSERT INTO `choix_multiple` (`id_choix_multiple`, `id_question_multiple`) VALUES ('8', '3');
-INSERT INTO `choix_multiple` (`id_choix_multiple`, `id_question_multiple`) VALUES ('9', '3');
-
-INSERT INTO `question` (`id_formulaire`, `intitule`) VALUES ('2', 'Choisi ce que tu préfères faire.');
-INSERT INTO `question_multiple` (`id_question_multiple`) VALUES ('4');
-INSERT INTO `choix` (`signification`) VALUES ('Jouer');
-INSERT INTO `choix` (`signification`) VALUES ('Travailler');
-INSERT INTO `choix` (`signification`) VALUES ('Rien');
-INSERT INTO `choix_multiple` (`id_choix_multiple`, `id_question_multiple`) VALUES ('10', '4');
-INSERT INTO `choix_multiple` (`id_choix_multiple`, `id_question_multiple`) VALUES ('11', '4');
-INSERT INTO `choix_multiple` (`id_choix_multiple`, `id_question_multiple`) VALUES ('12', '4');
-
-INSERT INTO `question` (`id_formulaire`, `intitule`) VALUES ('1', 'Tu penses quoi de l\'iut ?');
-INSERT INTO `question_ouverte` (`id_question_ouverte`) VALUES ('5');
-
-INSERT INTO `question` (`id_formulaire`, `intitule`) VALUES ('2', 'À quoi tu penses quand je dis : chat !');
-INSERT INTO `question_ouverte` (`id_question_ouverte`) VALUES ('6');
-
--- replissage du formulaire
-
-INSERT INTO `sujet` (`id_sujet`) VALUES (NULL);
-INSERT INTO `reponse_unique` (`id_sujet`, `id_choix_unique`) VALUES ('1', '1');
-INSERT INTO `reponse_multiple` (`id_sujet`, `id_choix_multiple`) VALUES ('1', '7');
-INSERT INTO `reponse_multiple` (`id_sujet`, `id_choix_multiple`) VALUES ('1', '8');
-INSERT INTO `reponse_ouverte` (`id_sujet`, `id_question_ouverte`, `mots`) VALUES ('1', '5', 'l\'iut c\'est vraiment trop bien');
-
-INSERT INTO `sujet` (`id_sujet`) VALUES (NULL);
-INSERT INTO `reponse_unique` (`id_sujet`, `id_choix_unique`) VALUES ('2', '2');
-INSERT INTO `reponse_multiple` (`id_sujet`, `id_choix_multiple`) VALUES ('2', '7');
-INSERT INTO `reponse_multiple` (`id_sujet`, `id_choix_multiple`) VALUES ('2', '9');
-INSERT INTO `reponse_ouverte` (`id_sujet`, `id_question_ouverte`, `mots`) VALUES ('2', '5', 'bof.');
-
--- création des vues
-
-CREATE VIEW view_question_unique AS
-SELECT id_formulaire, id_question, intitule, id_choix, signification
-FROM question
-INNER JOIN question_unique ON question.id_question = question_unique.id_question_unique
-INNER JOIN choix_unique ON question_unique.id_question_unique = choix_unique.id_question_unique
-INNER JOIN choix ON choix_unique.id_choix_unique = choix.id_choix;
-
-CREATE VIEW view_question_multiple AS
-SELECT id_formulaire, id_question, intitule, id_choix, signification
-FROM question
-INNER JOIN question_multiple ON question.id_question = question_multiple.id_question_multiple
-INNER JOIN choix_multiple ON question_multiple.id_question_multiple = choix_multiple.id_question_multiple
-INNER JOIN choix ON choix_multiple.id_choix_multiple = choix.id_choix;
-
-CREATE VIEW view_question_ouverte AS
-SELECT id_formulaire, id_question, intitule
-FROM question
-INNER JOIN question_ouverte ON question.id_question = question_ouverte.id_question_ouverte;
-
-CREATE VIEW view_question AS
-SELECT *, 'unique' AS 'type'
-FROM `view_question_unique`
-UNION
-SELECT *, 'multiple' AS 'type'
-FROM `view_question_multiple`
-UNION
-SELECT *, NULL AS 'id_choix', NULL AS 'signification', 'ouverte' AS 'type'
-FROM `view_question_ouverte`;
-
-CREATE VIEW view_reponse_unique AS
-SELECT id_formulaire, id_question, intitule, id_sujet, id_choix, signification
-FROM `reponse_unique`
-INNER JOIN `choix` ON reponse_unique.id_choix_unique = choix.id_choix
-INNER JOIN `choix_unique` ON reponse_unique.id_choix_unique = choix_unique.id_choix_unique
-INNER JOIN `question` ON choix_unique.id_question_unique = question.id_question;
-
-CREATE VIEW view_reponse_multiple AS
-SELECT id_formulaire, id_question, intitule, id_sujet, id_choix, signification, id_reponse_multiple
-FROM `reponse_multiple`
-INNER JOIN `choix` ON reponse_multiple.id_choix_multiple = choix.id_choix
-INNER JOIN `choix_multiple` ON reponse_multiple.id_choix_multiple = choix_multiple.id_choix_multiple
-INNER JOIN `question` ON choix_multiple.id_question_multiple = question.id_question;
-
-CREATE VIEW view_reponse_ouverte AS
-SELECT id_formulaire, id_question, intitule, id_sujet, mots
-FROM `reponse_ouverte`
-INNER JOIN `question` ON reponse_ouverte.id_question_ouverte = question.id_question;
-
-CREATE VIEW view_reponse AS
-SELECT id_formulaire, id_question, intitule, id_sujet, id_choix, signification, NULL AS 'id_reponse_multiple', NULL AS 'mots', 'unique' AS 'type'
-FROM `view_reponse_unique`
-UNION
-SELECT id_formulaire, id_question, intitule, id_sujet, id_choix, signification, id_reponse_multiple, NULL AS 'mots', 'multiple' AS 'type'
-FROM `view_reponse_multiple`
-UNION
-SELECT id_formulaire, id_question, intitule, id_sujet, NULL AS 'id_choix', NULL AS 'signification', NULL AS 'id_reponse_multiple', mots, 'ouverte' AS 'type'
-FROM `view_reponse_ouverte`;
-
-CREATE VIEW view_sujet AS
-SELECT DISTINCT id_formulaire, id_sujet, id_question
-FROM `view_reponse`;
-
-CREATE VIEW view_sujet_nb_question AS
-SELECT id_formulaire, id_sujet, COUNT(*) AS 'nb_question'
-FROM `view_sujet`
-GROUP BY id_sujet;
+INSERT INTO groupe_personne (id_groupe,id_personne) VALUES (48,53),(75,82),(56,85),(45,76),(70,52),(84,100),(98,31),(56,86),(97,19),(35,99),(21,26),(58,9),(91,83),(96,18),(2,2),(70,15),(19,45),(3,25),(95,76),(6,19),(41,40),(29,72),(96,66),(64,25),(28,78),(77,72),(85,19),(26,4),(57,33),(74,17),(26,77),(21,32),(73,89),(28,85),(83,84),(8,85),(24,62),(83,34),(9,18),(99,59),(61,97),(76,37),(24,10),(96,99),(29,42),(71,41),(96,48),(24,20),(74,8),(55,6);
+INSERT INTO groupe_personne (id_groupe,id_personne) VALUES (74,63),(12,85),(44,18),(4,68),(74,28),(6,9),(11,1),(41,69),(34,14),(76,11),(21,6),(63,6),(100,57),(95,52),(8,57),(65,82),(9,56),(43,85),(33,20),(71,63),(92,13),(31,62),(42,28),(73,10),(18,89),(10,100),(82,24),(81,8),(80,93),(43,33),(25,51),(12,43),(77,98),(70,78),(10,6),(79,79),(59,6),(16,39),(63,85),(91,42),(70,87),(6,93),(14,41),(35,69),(5,49),(57,34),(24,40),(67,29),(81,72),(41,78);
+INSERT INTO groupe_personne (id_groupe,id_personne) VALUES (13,37),(86,4),(41,51),(42,29),(45,37),(83,57),(98,54),(9,99),(94,72),(79,50),(35,48),(74,44),(25,97),(74,81),(67,44),(1,91),(12,100),(38,49),(94,82),(47,93),(23,5),(100,96),(78,70),(81,36),(65,16),(48,46),(7,46),(60,93),(15,36),(81,7),(25,67),(97,94),(91,8),(48,54),(72,44),(81,76),(72,97),(34,24),(39,39),(90,94),(75,15),(43,48),(48,44),(67,99),(16,7),(30,33),(37,87),(12,15),(92,38),(24,78);

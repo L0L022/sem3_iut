@@ -13,6 +13,18 @@ ColorImage::ColorImage(const Size width, const Size height)
 : Image<ColorPixel>(width, height)
 {}
 
+ColorImage::ColorImage(const Image<ColorPixel> &image)
+: Image<ColorPixel>(image)
+{}
+
+ColorImage* ColorImage::simpleScale(const Size width, const Size height) const
+{
+  Image<ColorPixel>* img = Image<ColorPixel>::simpleScale(width, height);
+  ColorImage* i = new ColorImage(*img);
+  delete img;
+  return i;
+}
+
 void ColorImage::writePPM(std::ostream &os) const
 {
   std::stringstream ss;
@@ -215,7 +227,7 @@ ColorImage* ColorImage::readJPEG(std::istream &is)
    */
 
    ColorImage * finalImage = new ColorImage(cinfo.output_width, cinfo.output_height);
-   
+
   while (cinfo.output_scanline < cinfo.output_height) {
     /* jpeg_read_scanlines expects an array of pointers to scanlines.
      * Here the array is only one element long, but you could ask for
