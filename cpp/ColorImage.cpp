@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
+#include <memory>
 
 extern "C" {
   #include <jpeglib.h>
@@ -19,10 +20,9 @@ ColorImage::ColorImage(const Image<ColorPixel> &image)
 
 ColorImage* ColorImage::simpleScale(const Size width, const Size height) const
 {
-  Image<ColorPixel>* img = Image<ColorPixel>::simpleScale(width, height);
-  ColorImage* i = new ColorImage(*img);
-  delete img;
-  return i;
+  std::unique_ptr<Image<ColorPixel>> imgT(Image<ColorPixel>::simpleScale(width, height));
+  ColorImage* imgC = new ColorImage(std::move(*imgT));
+  return imgC;
 }
 
 void ColorImage::writePPM(std::ostream &os) const
