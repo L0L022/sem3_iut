@@ -23,6 +23,8 @@ struct ColorPixel {
     red = value;
     green = value;
     blue = value;
+    
+    return *this;
   }
 };
 
