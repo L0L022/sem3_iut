@@ -14,7 +14,7 @@ public:
   Image() = delete;
   Image(const Size width, const Size height);
   Image(const Image &image);
-  // Image(Image &&image);
+  Image(Image &&image);
   ~Image();
 
   Image &operator=(const Image &image) = delete;
@@ -68,12 +68,14 @@ Image<Pixel>::Image(const Image &image) : Image(image.m_width, image.m_height) {
   std::memcpy(m_pixels, image.m_pixels, sizeof(Pixel) * pSize());
 }
 
-// template<typename Pixel> // attention move fait pas ce que je veux
-// Image<Pixel>::Image(Image &&image)
-// : m_pixels(std::move(image.m_pixels)),
-//   m_width(std::move(image.m_width)),
-//   m_height(std::move(image.m_height))
-// {}
+template<typename Pixel>
+Image<Pixel>::Image(Image &&image)
+: Image(0, 0)
+{
+  std::swap(m_pixels, image.m_pixels);
+  std::swap(m_width, image.m_width);
+  std::swap(m_height, image.m_height);
+}
 
 template <typename Pixel> Image<Pixel>::~Image() { delete[] m_pixels; }
 
