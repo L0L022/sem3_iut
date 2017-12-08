@@ -23,6 +23,8 @@ struct ColorPixel {
     red = value;
     green = value;
     blue = value;
+
+    return *this;
   }
 };
 
@@ -39,6 +41,9 @@ public:
 
   void writeJPEG(std::ostream &os, int quality = 75) const;
   static ColorImage* readJPEG(std::istream &is);
+
+  void writeTGA(std::ostream& os) const;
+  static ColorImage* readTGA(std::istream& is);
 };
 
 std::ostream &operator<<(std::ostream &os, const ColorPixel &pixel);

@@ -4,6 +4,8 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
+#include <memory>
+#include <cstring>
 
 extern "C" {
   #include <jpeglib.h>
@@ -19,10 +21,9 @@ ColorImage::ColorImage(const Image<ColorPixel> &image)
 
 ColorImage* ColorImage::simpleScale(const Size width, const Size height) const
 {
-  Image<ColorPixel>* img = Image<ColorPixel>::simpleScale(width, height);
-  ColorImage* i = new ColorImage(*img);
-  delete img;
-  return i;
+  std::unique_ptr<Image<ColorPixel>> imgT(Image<ColorPixel>::simpleScale(width, height));
+  ColorImage* imgC = new ColorImage(std::move(*imgT));
+  return imgC;
 }
 
 void ColorImage::writePPM(std::ostream &os) const
@@ -271,6 +272,63 @@ ColorImage* ColorImage::readJPEG(std::istream &is)
 
   /* And we're done! */
   return finalImage;
+}
+
+void ColorImage::writeTGA(std::ostream& os) const
+{
+  const char identificationField[255] = "";
+
+  // Number of Characters in Identification Field
+
+  unsigned char lengthIdentificationField = std::strlen(identificationField);
+  os.write(reinterpret_cast<char*>(&lengthIdentificationField), sizeof(lengthIdentificationField));
+
+  // Color Map Type
+
+  unsigned char hasColorMap = 0;
+  os.write(reinterpret_cast<char*>(&hasColorMap), sizeof(hasColorMap));
+
+  // Image Type Code
+
+  unsigned char type = 2;
+  os.write(reinterpret_cast<char*>(&type), sizeof(type));
+
+  // lo-hi -> low - high
+  // Color Map Specification
+
+  int16_t colorMapOrigin = 0;
+  os.write(reinterpret_cast<char*>(&colorMapOrigin), sizeof(colorMapOrigin));
+
+  int16_t colorMapLength = 0;
+  os.write(reinterpret_cast<char*>(&colorMapLength), sizeof(colorMapLength));
+
+  unsigned char colorMapEntrySize = 0;
+  os.write(reinterpret_cast<char*>(&colorMapEntrySize), sizeof(colorMapEntrySize));
+
+  // Image Specification
+
+  int16_t xOrigin = 0;
+  int16_t yOrigin = 0;
+  int16_t width = this->width();
+  int16_t height = this->height();
+  unsigned char pixelSize = 16;
+
+  // Image Descriptor Byte
+
+  unsigned char description = 0;
+
+  // Image Identification Field
+
+  os.write(identificationField, lengthIdentificationField);
+
+  // Color map data
+
+  // Image Data Field
+}
+
+ColorImage* ColorImage::readTGA(std::istream& is)
+{
+  return nullptr;
 }
 
 std::ostream &operator<<(std::ostream &os, const ColorPixel &pixel)
