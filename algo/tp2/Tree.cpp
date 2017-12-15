@@ -14,7 +14,12 @@ void Tree::disp(const Node::Ptr& node) const
 {
   if (node) {
     disp(node->left);
-    std::cout << node->value << ", ";
+    //std::cout << "[node: " << node << " parent: " << node->parent << " left: " << node->left << " right: " << node->right << " value: " << node->value << "] ";
+    std::cout << reinterpret_cast<size_t>(node) << " [label=\"<f0> |<f1> " << node->value << "|<f2> \"];\n";
+    if (node->left)
+      std::cout << "\"" << reinterpret_cast<size_t>(node) << "\":f0 -> \"" << reinterpret_cast<size_t>(node->left) << "\":f1;\n";
+    if (node->right)
+      std::cout << "\"" << reinterpret_cast<size_t>(node) << "\":f2 -> \"" << reinterpret_cast<size_t>(node->right) << "\":f1;\n";
     disp(node->right);
   }
 }
@@ -26,37 +31,32 @@ Node::Ptr Tree::create(const Node::T& value) const
 
 Node::Ptr Tree::find(const Node::T& value, const Node::Ptr& node) const
 {
-  // if (node) {
-  //   if (node->value == value)
-  //     return node;
-  //   else if (node->value < value)
-  //     return find(value, node->right);
-  //   else
-  //     return find(value, node->left);
-  // }
-  // return nullptr;
-
   Node::Ptr n = node;
   while (n != nullptr and n->value != value) {
-    std::cout << n->value << '\n';
-    if (node->value < value)
-      n = node->right;
-    else if (value < node->value)
-      n = node->left;
+    if (n->value < value)
+      n = n->right;
+    else if (value < n->value)
+      n = n->left;
   }
   return n;
 }
 
 Node::Ptr Tree::insert(const Node::T& value, Node::Ptr& node) const
 {
+  Node::Ptr p = node;
   Node::Ptr* n = &node;
   while (*n != nullptr) {
-    if ((*n)->value == value)
+    if ((*n)->value == value) {
       return *n;
-    else if ((*n)->value < value)
+    } else if ((*n)->value < value) {
+      p = *n;
       n = &(*n)->right;
-    else
+    } else {
+      p = *n;
       n = &(*n)->left;
+    }
   }
-  return *n = create(value);
+  *n = create(value);
+  (*n)->parent = p;
+  return *n;
 }
