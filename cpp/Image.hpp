@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cstring>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 
 template <typename Pixel> class Image {
@@ -15,7 +16,7 @@ public:
   Image(const Size width, const Size height);
   Image(const Image &image);
   Image(Image &&image);
-  ~Image();
+  //~Image();
 
   Image &operator=(const Image &image) = delete;
 
@@ -51,7 +52,7 @@ private:
   inline size_t pSize() const { return m_width * m_height; }
 
 private:
-  Pixel *m_pixels;
+  std::unique_ptr<Pixel[]> m_pixels;
   Size m_width, m_height;
 };
 
@@ -61,12 +62,12 @@ std::istream &operator>>(std::istream &is, uint8_t &value);
 template <typename Pixel>
 Image<Pixel>::Image(const Size width, const Size height)
     : m_pixels(nullptr), m_width(width), m_height(height) {
-  m_pixels = new Pixel[pSize()];
+  m_pixels = std::make_unique<Pixel[]>(pSize());
 }
 
 template <typename Pixel>
 Image<Pixel>::Image(const Image &image) : Image(image.m_width, image.m_height) {
-  std::memcpy(m_pixels, image.m_pixels, sizeof(Pixel) * pSize());
+  std::memcpy(m_pixels.get(), image.m_pixels.get(), sizeof(Pixel) * pSize());
 }
 
 template <typename Pixel> Image<Pixel>::Image(Image &&image) : Image(0, 0) {
@@ -75,7 +76,7 @@ template <typename Pixel> Image<Pixel>::Image(Image &&image) : Image(0, 0) {
   std::swap(m_height, image.m_height);
 }
 
-template <typename Pixel> Image<Pixel>::~Image() { delete[] m_pixels; }
+// template <typename Pixel> Image<Pixel>::~Image() { delete[] m_pixels; }
 
 template <typename Pixel>
 Pixel &Image<Pixel>::pixel(const Size x, const Size y) {
@@ -193,7 +194,10 @@ void Image<Pixel>::fillCircle(const Size x, const Size y, const Size radius,
 template <typename Pixel>
 Image<Pixel> *Image<Pixel>::simpleScale(const Size width,
                                         const Size height) const {
-  Image<Pixel> *img = new Image<Pixel>(width, height);
+  if (width < 1 and height < 1)
+    throw std::runtime_error("");
+
+  auto img = std::make_unique<Image<Pixel>>(width, height);
 
   for (Size y = 0; y < height; ++y)
     for (Size x = 0; x < width; ++x)
@@ -201,13 +205,13 @@ Image<Pixel> *Image<Pixel>::simpleScale(const Size width,
           pixel(x / static_cast<double>(width) * this->width(),
                 y / static_cast<double>(height) * this->height());
 
-  return img;
+  return img.release();
 }
 
 template <typename Pixel>
 Image<Pixel> *Image<Pixel>::bilinearScale(const Size width,
                                           const Size height) const {
-  Image<Pixel> *img = new Image<Pixel>(width, height);
+  auto img = std::make_unique<Image<Pixel>>(width, height);
 
   for (Size y = 0; y < height; ++y) {
     for (Size x = 0; x < width; ++x) {
@@ -223,7 +227,7 @@ Image<Pixel> *Image<Pixel>::bilinearScale(const Size width,
     }
   }
 
-  return img;
+  return img.release();
 }
 
 template <typename Pixel>

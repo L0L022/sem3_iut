@@ -3,6 +3,7 @@
 
 #include "Image.hpp"
 #include <cmath>
+#include <string>
 
 class ColorPixel {
 public:
@@ -27,22 +28,12 @@ public:
     return red == cp.red and green == cp.green and blue == cp.blue;
   }
 
-  bool almostEqual(const ColorPixel &cp) const {
-    return almostEqual(red, cp.red) and almostEqual(green, cp.green) and
-           almostEqual(blue, cp.blue);
-  }
-
   ColorPixel operator+(const ColorPixel &cp) const {
     return ColorPixel(red + cp.red, green + cp.green, blue + cp.blue);
   }
 
   ColorPixel operator*(const double v) const {
     return ColorPixel(red * v, green * v, blue * v);
-  }
-
-private:
-  bool almostEqual(const uint8_t n1, const uint8_t n2) const {
-    return std::abs(n1 - n2) < 5;
   }
 };
 
@@ -59,7 +50,8 @@ public:
   void writePPM(std::ostream &os) const;
   static ColorImage *readPPM(std::istream &is);
 
-  void writeJPEG(std::ostream &os, int quality = 75) const;
+  void writeJPEG(std::ostream &os, unsigned int quality = 75) const;
+  void writeJPEG(const std::string &fileName, unsigned int quality = 75) const;
   static ColorImage *readJPEG(std::istream &is);
 
   void writeTGA(std::ostream &os, bool rle = true) const;
