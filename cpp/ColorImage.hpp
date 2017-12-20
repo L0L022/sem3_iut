@@ -59,6 +59,10 @@ public:
 
   void writeTGA(std::ostream &os, bool rle = true) const;
   static ColorImage *readTGA(std::istream &is);
+
+  static ColorImage *readMaison2(std::istream &is);
+
+  ColorImage *anaglyphe() const;
 };
 
 std::ostream &operator<<(std::ostream &os, const ColorPixel &pixel);
