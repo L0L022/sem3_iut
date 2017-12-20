@@ -52,7 +52,10 @@ public:
 
   void writeJPEG(std::ostream &os, unsigned int quality = 75) const;
   void writeJPEG(const std::string &fileName, unsigned int quality = 75) const;
+  void writeJPEG(const char *fileName, unsigned int quality = 75) const;
   static ColorImage *readJPEG(std::istream &is);
+  static ColorImage *readJPEG(const std::string &fileName);
+  static ColorImage *readJPEG(const char *fileName);
 
   void writeTGA(std::ostream &os, bool rle = true) const;
   static ColorImage *readTGA(std::istream &is);

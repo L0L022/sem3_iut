@@ -157,6 +157,10 @@ void ColorImage::writeJPEG(const std::string &fileName,
     throw std::runtime_error("Can't open file");
 }
 
+void ColorImage::writeJPEG(const char *fileName, unsigned int quality) const {
+  writeJPEG(fileName);
+}
+
 ColorImage *ColorImage::readJPEG(std::istream &is) {
   struct jpeg_decompress_struct cinfo;
   struct jpeg_error_mgr jpegError;
@@ -195,6 +199,18 @@ ColorImage *ColorImage::readJPEG(std::istream &is) {
   jpeg_destroy_decompress(&cinfo);
 
   return finalImage.release();
+}
+
+ColorImage *ColorImage::readJPEG(const std::string &fileName) {
+  std::ifstream file(fileName, std::ios::binary);
+  if (file.is_open())
+    return readJPEG(file);
+  else
+    throw std::runtime_error("Can't open file");
+}
+
+ColorImage *ColorImage::readJPEG(const char *fileName) {
+  return readJPEG(fileName);
 }
 
 class targa_info {

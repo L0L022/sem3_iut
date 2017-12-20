@@ -16,7 +16,6 @@ public:
   Image(const Size width, const Size height);
   Image(const Image &image);
   Image(Image &&image);
-  //~Image();
 
   Image &operator=(const Image &image) = delete;
 
@@ -75,8 +74,6 @@ template <typename Pixel> Image<Pixel>::Image(Image &&image) : Image(0, 0) {
   std::swap(m_width, image.m_width);
   std::swap(m_height, image.m_height);
 }
-
-// template <typename Pixel> Image<Pixel>::~Image() { delete[] m_pixels; }
 
 template <typename Pixel>
 Pixel &Image<Pixel>::pixel(const Size x, const Size y) {
