@@ -45,13 +45,14 @@ public:
                   const Pixel &color);
 
   Image *simpleScale(const Size width, const Size height) const;
+  Image *bilinearScale(const Size width, const Size height) const;
 
 private:
   inline size_t pSize() const { return m_width * m_height; }
 
 private:
   Pixel *m_pixels;
-  const Size m_width, m_height;
+  Size m_width, m_height;
 };
 
 std::ostream &operator<<(std::ostream &os, const uint8_t &value);
@@ -68,10 +69,7 @@ Image<Pixel>::Image(const Image &image) : Image(image.m_width, image.m_height) {
   std::memcpy(m_pixels, image.m_pixels, sizeof(Pixel) * pSize());
 }
 
-template<typename Pixel>
-Image<Pixel>::Image(Image &&image)
-: Image(0, 0)
-{
+template <typename Pixel> Image<Pixel>::Image(Image &&image) : Image(0, 0) {
   std::swap(m_pixels, image.m_pixels);
   std::swap(m_width, image.m_width);
   std::swap(m_height, image.m_height);
@@ -173,10 +171,6 @@ void Image<Pixel>::fillCircle(const Size x, const Size y, const Size radius,
   // merci Eric Andres
   Size _x = 0, _y = radius, d = radius - 1;
   while (_y >= _x) {
-    // hLine( x - _x , y - _y , (x + _x) - (x - _x) + 1, color);
-    // hLine( x - _y , y - _x , (x + _y) - (x - _y) + 1, color);
-    // hLine( x - _y , y + _x , (x + _y) - (x - _y) + 1, color);
-    // hLine( x - _x , y + _y , (x + _x) - (x - _x) + 1, color);
     hLine(x - _x, y - _y, 2 * _x + 1, color);
     hLine(x - _y, y - _x, 2 * _y + 1, color);
     hLine(x - _y, y + _x, 2 * _y + 1, color);
@@ -206,6 +200,28 @@ Image<Pixel> *Image<Pixel>::simpleScale(const Size width,
       img->pixel(x, y) =
           pixel(x / static_cast<double>(width) * this->width(),
                 y / static_cast<double>(height) * this->height());
+
+  return img;
+}
+
+template <typename Pixel>
+Image<Pixel> *Image<Pixel>::bilinearScale(const Size width,
+                                          const Size height) const {
+  Image<Pixel> *img = new Image<Pixel>(width, height);
+
+  for (Size y = 0; y < height; ++y) {
+    for (Size x = 0; x < width; ++x) {
+      double px = x / static_cast<double>(width) * this->width(),
+             py = y / static_cast<double>(height) * this->height();
+      Size x1 = px, y1 = py;
+      Size x2 = std::min(x1 + 1, this->width() - 1),
+           y2 = std::min(y1 + 1, this->height() - 1);
+      double dx = px - x1, dy = py - y1;
+      img->pixel(x, y) =
+          (pixel(x1, y1) * (1.0 - dy) + pixel(x1, y2) * dy) * (1.0 - dx) +
+          (pixel(x2, y1) * (1.0 - dy) + pixel(x2, y2) * dy) * dx;
+    }
+  }
 
   return img;
 }
