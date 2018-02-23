@@ -10,7 +10,7 @@ public class Vectorr
     System.out.println("Ce que vous avez entré :");
     disp(inputs);
     System.out.println("Lise des doublons :");
-    nbDuplication(inputs);
+    showDuplication(inputs);
   }
 
   public static void disp(Vector<String> array)
@@ -32,6 +32,7 @@ public class Vectorr
       if (!isZero)
         array.add(input);
     } while (!isZero);
+    k.close();
   }
 
   public static void sortedFill(Vector<String> array)
@@ -40,24 +41,31 @@ public class Vectorr
     Collections.sort(array);
   }
 
-  public static void nbDuplication(Vector<String> array)
+  public static Map<String, Integer> getDuplication(Vector<String> array)
   {
-    Map<String, Integer> duplication = new HashMap<>();
-    Integer occ;
-    for (String str : array) {
-      occ = duplication.get(str);
-      if (occ == null)
-        duplication.put(str, 1);
-      else
-        duplication.put(str, occ+1);
-    }
+   Map<String, Integer> duplication = new HashMap<>();
+   Integer occ;
+   for (String str : array) {
+     occ = duplication.get(str);
+     if (occ == null)
+       duplication.put(str, 1);
+     else
+       duplication.put(str, occ+1);
+   }
 
-    Set<Entry<String, Integer>> setHm = duplication.entrySet();
-    Iterator<Entry<String, Integer>> it = setHm.iterator();
-    while(it.hasNext()){
-       Entry<String, Integer> e = it.next();
-       if (e.getValue() > 1)
-        System.out.println(e.getKey() + " : " + e.getValue());
-    }
+   Set<Entry<String, Integer>> dupSet = duplication.entrySet();
+   Iterator<Entry<String, Integer>> it = dupSet.iterator();
+   while(it.hasNext()){
+      Entry<String, Integer> e = it.next();
+      if (e.getValue() <= 1)
+       duplication.remove(e.getKey());
+   }
+
+   return duplication;
+  }
+
+  public static void showDuplication(Vector<String> array)
+  {
+    getDuplication(array).forEach((k, v) -> System.out.println(k + " : " + v));
   }
 }
