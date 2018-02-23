@@ -33,6 +33,8 @@ public:
 
   void hLine(const Size x, const Size y, const Size width, const Pixel &color);
   void vLine(const Size x, const Size y, const Size height, const Pixel &color);
+  void line(const Size x1, const Size y1, const Size x2, const Size y2,
+            const Pixel &color);
 
   void rectangle(const Size x, const Size y, const Size width,
                  const Size height, const Pixel &color);
@@ -116,6 +118,54 @@ void Image<Pixel>::vLine(const Size x, const Size y, const Size height,
                          const Pixel &color) {
   for (Image::Size i = 0; i < height; ++i)
     pixel(x, y + i) = color;
+}
+
+template <typename Pixel>
+void Image<Pixel>::line(const Size x1, const Size y1, const Size x2,
+                        const Size y2, const Pixel &color) {
+  Size x=x1;
+  Size y=y1;
+  int longX=x2-x1;
+  int longY=y2-y1;
+
+  if(longY<longX)
+  { // 1er Octant
+   const int c1=2*(longY-longX);
+   const int c2=2*longY;
+   int critere=c2-longX;
+   while(x<=x2)
+    {
+      pixel(x, y) = color;
+     if(critere>=0)
+      { // changement de ligne horizontale
+       y++;
+       critere=critere+c1;
+      }
+     else
+      // toujours la même ligne horizontale
+      critere=critere+c2;
+     x++; // ligne suivante, et recommence
+    }
+  }
+  else
+  { // 2eme Octant
+   const int c1=2*(longX-longY);
+   const int c2=2*longX;
+   int critere=c2-longY;
+   while(y<=y2)
+    {
+      pixel(x, y) = color;
+     if(critere>=0)
+      { // changement de ligne verticale
+       x++;
+       critere=critere+c1;
+      }
+     else
+      // toujours la même ligne verticale
+      critere=critere+c2;
+     y++; // ligne suivante, et recommence
+    }
+  }
 }
 
 template <typename Pixel>

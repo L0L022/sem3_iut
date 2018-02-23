@@ -482,11 +482,11 @@ ColorImage *ColorImage::readTGA(std::istream &is) {
   auto image = std::make_unique<ColorImage>(i.width, i.height);
 
   if (i.type == 1) {
-    if (i.pixel_depth == 8 and i.description == 0b00100000 and
+    if (i.pixel_depth == 8 /*and i.description == 0b00100000*/ and
         i.color_map_entry_size == 24) {
       for (size_t y = 0; y < image->height(); y++) {
         for (size_t x = 0; x < image->width(); x++) {
-          auto &p = image->pixel(x, y);
+          auto &p = i.description == 0b00100000 ? image->pixel(x, y) : image->pixel(x, image->height() - y);
           uint8_t indice = i.data[i.width * y + x];
           uint8_t *p_data = i.color_map_data + indice * 3;
           p.blue = *p_data++;
@@ -498,10 +498,10 @@ ColorImage *ColorImage::readTGA(std::istream &is) {
       throw std::runtime_error("Unsupported tga type 1");
     }
   } else if (i.type == 2) {
-    if (i.pixel_depth == 3 * 8 and i.description == 0b00100000) {
+    if (i.pixel_depth == 3 * 8 /*and i.description == 0b00100000*/) {
       for (size_t y = 0; y < image->height(); y++) {
         for (size_t x = 0; x < image->width(); x++) {
-          auto &p = image->pixel(x, y);
+          auto &p = i.description == 0b00100000 ? image->pixel(x, y) : image->pixel(x, image->height() - y);
           uint8_t *p_data = i.data + (i.width * y + x) * 3;
           p.blue = *p_data++;
           p.green = *p_data++;
@@ -513,6 +513,68 @@ ColorImage *ColorImage::readTGA(std::istream &is) {
     }
   } else {
     throw std::runtime_error("Unknown tga type");
+  }
+
+  return image.release();
+}
+
+void reverse_bytes(char *ptr, const size_t length) {
+  for (size_t i = 0; i < length / 2; ++i)
+    std::swap(ptr[i], ptr[length - i - 1]);
+}
+
+ColorImage *ColorImage::readMaison2(std::istream &is) {
+  char magic_number[7];
+  uint8_t comment_length;
+  uint16_t height;
+  uint16_t width;
+  std::unique_ptr<uint8_t[]> comment;
+  std::unique_ptr<uint8_t[]> data;
+  size_t data_length;
+
+  is.read(magic_number, 7);
+  is.read(reinterpret_cast<char *>(&comment_length), 1);
+  is.read(reinterpret_cast<char *>(&height), 2);
+  is.read(reinterpret_cast<char *>(&width), 2);
+  reverse_bytes(reinterpret_cast<char *>(&height), 2);
+  reverse_bytes(reinterpret_cast<char *>(&width), 2);
+
+  comment = std::make_unique<uint8_t[]>(comment_length);
+  data_length = width * height * 3;
+  data = std::make_unique<uint8_t[]>(data_length);
+
+  is.read(reinterpret_cast<char *>(comment.get()), comment_length);
+  is.read(reinterpret_cast<char *>(data.get()), data_length);
+
+  if (strncmp(magic_number, "Maison2", 7) != 0)
+    throw std::runtime_error("Wrong magic number");
+
+  auto image = std::make_unique<ColorImage>(width, height);
+
+  for (size_t y = 0; y < image->height(); y++) {
+    for (size_t x = 0; x < image->width(); x++) {
+      auto &p = image->pixel(x, y);
+      uint8_t *p_data = data.get() + (width * y + x);
+      p.green = *p_data;
+      p.blue = *(p_data +=(width * height));
+      p.red = *(p_data +=(width * height));
+    }
+  }
+
+  std::cout.write(reinterpret_cast<char *>(comment.get()), comment_length);
+  std::cout << '\n';
+
+  return image.release();
+}
+
+ColorImage *ColorImage::anaglyphe() const {
+  auto image = std::make_unique<ColorImage>(width() / 2, height());
+
+  for (size_t y = 0; y < image->height(); y++) {
+    for (size_t x = 0; x < image->width(); x++) {
+      ColorPixel left = pixel(x + width()/2, y), right = pixel(x, y);
+      image->pixel(x, y) = ColorPixel(left.red, right.green, right.blue);
+    }
   }
 
   return image.release();

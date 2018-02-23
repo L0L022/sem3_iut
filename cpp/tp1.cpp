@@ -17,6 +17,9 @@ int main() {
     catImage->fillRectangle(90, 85, 40, 20, 10);
     catImage->fillRectangle(190, 87, 40, 20, 255);
 
+    catImage->line(150, 150, 100, 200, 0);
+    catImage->line(150, 150, 200, 200, 0);
+
     ofstream catSave("tp1_ascii.pgm", std::ios::binary | std::ios::out);
 
     catImage->writePGM(catSave);
